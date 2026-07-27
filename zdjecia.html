@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>28 sierpnia 2026</title>
+    <title>Galeria zdjęć</title>
 
     <style>
         body {
@@ -14,12 +14,10 @@
 
         h1 {
             text-align: center;
-			color: #c44;
-        }
-
-		h2 {
-            text-align: center;
-			color: #c44;
+            font-family: 'Great Vibes', cursive;
+            font-size: 4rem;
+            font-weight: normal;
+            color: #8B5A5A;
         }
 
         .upload-panel {
@@ -45,7 +43,7 @@
 
         .gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fill,minmax(250px,1fr));
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 15px;
         }
 
@@ -66,12 +64,10 @@
 </head>
 <body>
 
-<h1>28 sierpnia 2026</h1>
-<h2>Galeria zdjęć Weronika & Łukasz</h2>
+<h1>Galeria zdjęć Weronika & Łukasz</h1>
 
 <div class="upload-panel">
 
-    <!-- Aparat telefonu -->
     <input
         type="file"
         id="imageInput"
@@ -88,14 +84,12 @@
 
 <script>
 
-    // KONFIGURACJA
     const owner = "tomekkotlewski";
     const repo = "weronika-lukasz";
     const branch = "main";
     const folder = "galeria";
 
-    // TYLKO TESTOWO
-    const githubToken = "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";
+    const githubToken = "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";
 
     async function loadGallery() {
 
@@ -105,91 +99,76 @@
         try {
 
             const response = await fetch(url, {
-				headers: {
-					Authorization: `Bearer ${githubToken}`,
-					Accept: "application/vnd.github+json"
-				}
-			});
-			
+                headers: {
+                    Authorization: `Bearer ${githubToken}`,
+                    Accept: "application/vnd.github+json"
+                }
+            });
+
+            console.log("Status:", response.status);
+
             const files = await response.json();
 
-            const gallery = document.getElementById("gallery");
+            if (!response.ok) {
+
+                console.error("Błąd GitHub:", files);
+
+                alert(
+                    "Błąd GitHub:\n\n" +
+                    JSON.stringify(files, null, 2)
+                );
+
+                return;
+            }
+
+            if (!Array.isArray(files)) {
+
+                console.error(
+                    "Nie otrzymano tablicy plików:",
+                    files
+                );
+
+                return;
+            }
+
+            const gallery =
+                document.getElementById("gallery");
+
             gallery.innerHTML = "";
 
             files
                 .filter(file => file.type === "file")
                 .forEach(file => {
 
-                    const img = document.createElement("img");
+                    const img =
+                        document.createElement("img");
+
                     img.src = file.download_url;
+                    img.alt = file.name;
 
                     gallery.appendChild(img);
                 });
 
         } catch (err) {
+
             console.error(err);
+
+            alert(
+                "Błąd ładowania galerii:\n\n" +
+                err.message
+            );
         }
     }
 
     async function uploadImage() {
 
-        const input = document.getElementById("imageInput");
+        const input =
+            document.getElementById("imageInput");
 
         if (!input.files.length) {
+
             alert("Wybierz zdjęcie.");
             return;
         }
 
-        const file = input.files[0];
-
-        const reader = new FileReader();
-
-        reader.onload = async function() {
-
-            const base64 =
-                reader.result.split(",")[1];
-
-            const fileName =
-                `${Date.now()}_${file.name}`;
-
-            const url =
-                `https://api.github.com/repos/${owner}/${repo}/contents/${folder}/${fileName}`;
-
-            const response = await fetch(url, {
-                method: "PUT",
-                headers: {
-                    "Authorization": `Bearer ${githubToken}`,
-                    "Accept": "application/vnd.github+json"
-                },
-                body: JSON.stringify({
-                    message: `Dodano ${fileName}`,
-                    content: base64,
-                    branch: branch
-                })
-            });
-
-        if(response.ok){
-		alert("Zdjęcie zapisane.");
-	} else {
-	    const error = await response.json();
-
-	    console.log(error);
-
-	    alert(
-	        "Status: " + response.status +
-	        "\n\n" +
-	        JSON.stringify(error, null, 2)
-		);
-	}
-
-        };
-
-        reader.readAsDataURL(file);
-    }
-
-    loadGallery();
-
-</script>
-
-</body>
-</html>
+  
