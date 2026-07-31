@@ -131,12 +131,7 @@
 
         try {
 
-            const response = await fetch(url, {
-                headers: {
-                    Authorization: `Bearer ${githubToken}`,
-                    Accept: "application/vnd.github+json"
-                }
-            });
+            const response = await fetch(url);
 
             console.log("Status:", response.status);
 
