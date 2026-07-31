@@ -141,6 +141,7 @@
             console.log("Status:", response.status);
 
             const files = await response.json();
+            console.log(files);
 
             if (!response.ok) {
 
@@ -205,6 +206,9 @@
         }
 }
 loadGallery();
+console.log("Ładuję galerię...");
+console.log(url);
+
 </script>
 </body>
 </html>
