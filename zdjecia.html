@@ -191,28 +191,75 @@
 
     async function uploadImage() {
 
-        const input =
-            document.getElementById("imageInput");
+    const input = document.getElementById("imageInput");
 
-        if (!input.files.length) {
-
-            alert("Wybierz zdjęcie.");
-            return;
-        }
-        const file = input.files[0];
-        
-        const reader = new FileReader();
-        
-        reader.onload = function () {
-        
-            const base64Data = reader.result.split(",")[1];
-            
-            console.log("Nazwa:", file.name);
-            console.log("Rozmiar:", file.size);
-            console.log("Base64:", base64Data.substring(0, 50) + "...");
-        };
-        reader.readAsDataURL(file);
+    if (!input.files.length) {
+        alert("Wybierz zdjęcie.");
+        return;
     }
+
+    const file = input.files[0];
+
+    const owner = "tomekkotlewski";
+    const repo = "weronika-lukasz";
+    const branch = "main";
+    const folder = "galeria";
+
+    const githubToken = "test_token";
+
+    const reader = new FileReader();
+
+    reader.onload = async function () {
+
+        const base64Content =
+            reader.result.split(",")[1];
+
+        const fileName =
+            `${Date.now()}_${file.name}`;
+
+        const url =
+            `https://api.github.com/repos/${owner}/${repo}/contents/${folder}/${fileName}`;
+
+        try {
+
+            const response = await fetch(url, {
+                method: "PUT",
+                headers: {
+                    "Authorization": `Bearer ${githubToken}`,
+                    "Accept": "application/vnd.github+json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    message: `Dodano zdjęcie ${fileName}`,
+                    content: base64Content,
+                    branch: branch
+                })
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                console.error(result);
+                alert("Błąd wysyłania zdjęcia.");
+                return;
+            }
+
+            alert("Zdjęcie wysłane!");
+
+            loadGallery();
+
+        } catch (err) {
+
+            console.error(err);
+
+            alert(
+                "Błąd:\n" + err.message
+            );
+        }
+    };
+
+    reader.readAsDataURL(file);
+}
 
 loadGallery();
 console.log("Ładuję galerię...");
