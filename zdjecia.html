@@ -126,15 +126,16 @@
 
     async function loadGallery() {
 
+        const url =
+            `https://api.github.com/repos/${owner}/${repo}/contents/${folder}`;
+
         const response = await fetch(url, {
             headers: {
             "Authorization": `Bearer ${githubToken}`,
             "Accept": "application/vnd.github+json"
             }
         });
-
-        const url =
-            `https://api.github.com/repos/${owner}/${repo}/contents/${folder}`;
+        
 
         try {
 
