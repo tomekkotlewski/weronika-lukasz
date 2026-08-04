@@ -190,38 +190,6 @@
     <span class="close">&times;</span>
     <img id="lightboxImg">
 </div>
-
-lightboxImg.addEventListener(
-    "touchstart",
-    (e) => {
-        touchStartX =
-            e.changedTouches[0].screenX;
-    },
-    { passive: true }
-);
-
-lightboxImg.addEventListener(
-    "touchend",
-    (e) => {
-
-        touchEndX =
-            e.changedTouches[0].screenX;
-
-        const diff =
-            touchStartX - touchEndX;
-
-        if (Math.abs(diff) < 50) {
-            return;
-        }
-
-        if (diff > 0) {
-            showImage(currentIndex + 1);
-        } else {
-            showImage(currentIndex - 1);
-        }
-    },
-    { passive: true }
-);
     
 <script>
 
@@ -259,7 +227,11 @@ async function loadGallery() {
 
         gallery.innerHTML = "";
 
-        files.forEach(file => {
+        galleryFiles = files.filter(file =>
+            file.download_url
+        );
+        
+        galleryFiles.forEach((file, index) => {
 
             const img =
                 document.createElement("img");
@@ -269,13 +241,15 @@ async function loadGallery() {
             
             img.onclick = () => {
 
-            document.getElementById(
-                "lightboxImg"
-            ).src = img.src;
- 
-            document.getElementById(
-                "lightbox"
-            ).style.display = "flex";
+                currentIndex = index;
+
+                document.getElementById(
+                    "lightboxImg"
+                ).src = file.download_url;
+
+                document.getElementById(
+                    "lightbox"
+                ).style.display = "flex";
             };
 
             gallery.appendChild(img);
@@ -401,6 +375,38 @@ function showImage(index) {
         "lightboxImg"
     ).src = galleryFiles[index].download_url;
 }
+
+        lightboxImg.addEventListener(
+        "touchstart",
+        (e) => {
+            touchStartX =
+                e.changedTouches[0].screenX;
+        },
+        { passive: true }
+    );
+
+    lightboxImg.addEventListener(
+        "touchend",
+        (e) => {
+
+            touchEndX =
+                e.changedTouches[0].screenX;
+
+            const diff =
+                touchStartX - touchEndX;
+
+            if (Math.abs(diff) < 50) {
+                return;
+            }
+    
+            if (diff > 0) {
+                showImage(currentIndex + 1);
+            } else {
+                showImage(currentIndex - 1);
+            }
+        },
+        { passive: true }
+    );
 
 </script>
 </body>
