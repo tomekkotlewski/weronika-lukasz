@@ -147,54 +147,38 @@
   }
 };
 
-    async function loadGallery() {
+async function loadGallery() {
 
     try {
 
         const response = await fetch(
-            "https://weronika-upload.tomek-kotlewski.workers.dev"
+            "https://TWOJ-WORKER.workers.dev"
         );
 
         const files = await response.json();
+
+        console.log(files);
 
         const gallery =
             document.getElementById("gallery");
 
         gallery.innerHTML = "";
 
-        files
-            .filter(file =>
-                file.type === "file" &&
-                file.download_url &&
-                (
-                    file.name.endsWith(".jpg") ||
-                    file.name.endsWith(".jpeg") ||
-                    file.name.endsWith(".png") ||
-                    file.name.endsWith(".webp")
-                )
-            )
-            .forEach(file => {
+        files.forEach(file => {
 
-                const img =
-                    document.createElement("img");
+            const img =
+                document.createElement("img");
 
-                img.src =
-                    file.download_url;
+            img.src = file.download_url;
 
-                img.alt =
-                    file.name;
+            gallery.appendChild(img);
 
-                gallery.appendChild(img);
-            });
+        });
 
     } catch (err) {
 
         console.error(err);
 
-        alert(
-            "Błąd ładowania galerii:\n" +
-            err.message
-        );
     }
 }
 
