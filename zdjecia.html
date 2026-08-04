@@ -117,36 +117,6 @@
 
 <script>
 
-    const owner = "tomekkotlewski";
-    const repo = "weronika-lukasz";
-    const branch = "main";
-    const folder = "galeria";
-
-    const url =
-      `https://api.github.com/repos/${owner}/${repo}/contents/${folder}/${data.fileName}`;
-
-    const response = await fetch(url, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${env.GITHUB_TOKEN}`,
-        Accept: "application/vnd.github+json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        message: `Dodano ${data.fileName}`,
-        content: data.content,
-        branch: branch
-      })
-    });
-
-    const result = await response.json();
-
-    return Response.json(result, {
-      status: response.status
-    });
-  }
-};
-
 async function loadGallery() {
 
     try {
