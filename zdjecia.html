@@ -85,18 +85,15 @@
             transform: scale(1.03);
         }
 
-.lightbox {
-    display: none;
-    position: fixed;
-    inset: 0;
-
-    background: rgba(0,0,0,0.9);
-
-    align-items: center;
-    justify-content: center;
-
-    z-index: 9999;
-}
+        .lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
 
 .lightbox img {
     max-width: 95%;
@@ -143,6 +140,11 @@
 
 <div id="gallery" class="gallery"></div>
 
+<div id="lightbox" class="lightbox">
+    <span class="close">&times;</span>
+    <img id="lightboxImg">
+</div>
+    
 <script>
 
 async function loadGallery() {
@@ -170,13 +172,16 @@ async function loadGallery() {
             img.src = file.download_url;
             img.alt = file.name;
             
-img.onclick = () => {
+            img.onclick = () => {
 
-document.getElementById("lightboxImg").src = img.src;
+            document.getElementById(
+                "lightboxImg"
+            ).src = img.src;
  
-document.getElementById("lightbox").style.display = "flex";
-
-};
+            document.getElementById(
+                "lightbox"
+            ).style.display = "flex";
+            };
 
             gallery.appendChild(img);
 
@@ -287,14 +292,5 @@ lightbox.onclick = (e) => {
     
 
 </script>
-
-<div id="lightbox" class="lightbox">
-
-<span class="close">&times;</span>
-
-<img id="lightboxImg">
-
-</div>
-    
 </body>
 </html>
