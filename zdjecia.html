@@ -136,6 +136,11 @@ async function loadGallery() {
                 document.createElement("img");
 
             img.src = file.download_url;
+            img.alt = file.name;
+            
+            img.onclick = () => {
+                window.open(img.src, "_blank");
+            };
 
             gallery.appendChild(img);
 
