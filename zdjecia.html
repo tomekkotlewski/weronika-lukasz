@@ -95,23 +95,61 @@
             z-index: 9999;
         }
 
-.lightbox img {
-    max-width: 95%;
-    max-height: 95%;
-    border-radius: 10px;
-}
+        .lightbox img {
+            max-width: 95%;
+            max-height: 95%;
+            border-radius: 10px;
+        }
 
-.close {
-    position: absolute;
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+        cursor: pointer;
+        }
 
-    top: 20px;
-    right: 30px;
+        #imageInput {
+            display: none;
+        }
 
-    color: white;
-    font-size: 40px;
+        .file-label {
+            background: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,.1);
+            transition: .2s;
+        }
 
-    cursor: pointer;
-}
+        .file-label:hover {
+            transform: translateY(-2px);
+        }
+
+        .file-name {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .upload-btn {
+            background: #FF0066;
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .upload-btn:hover {
+            background: #e00059;
+            transform: translateY(-2px);
+        }
+        
         
     </style>
 </head>
@@ -154,6 +192,17 @@
 </div>
     
 <script>
+
+    document
+    .getElementById("imageInput")
+    .addEventListener("change", function () {
+
+        document.getElementById("fileName").textContent =
+            this.files.length
+                ? this.files[0].name
+                : "Nie wybrano zdjęcia";
+    });
+
 
 async function loadGallery() {
 
