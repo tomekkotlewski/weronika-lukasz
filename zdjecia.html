@@ -117,12 +117,46 @@
 
 <script>
 
+export default {
+  async fetch(request, env) {
+
+    if (request.method !== "POST") {
+      return new Response("Method not allowed", {
+        status: 405
+      });
+    }
+
+    const data = await request.json();
+
     const owner = "tomekkotlewski";
     const repo = "weronika-lukasz";
     const branch = "main";
     const folder = "galeria";
 
-    const githubToken = "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";
+    const url =
+      `https://api.github.com/repos/${owner}/${repo}/contents/${folder}/${data.fileName}`;
+
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${env.GITHUB_TOKEN}`,
+        Accept: "application/vnd.github+json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: `Dodano ${data.fileName}`,
+        content: data.content,
+        branch: branch
+      })
+    });
+
+    const result = await response.json();
+
+    return Response.json(result, {
+      status: response.status
+    });
+  }
+};
 
     async function loadGallery() {
 
@@ -131,12 +165,19 @@
         
         try {
             
-            const response = await fetch(url, {
-                headers: {
-                "Authorization": `Bearer ${githubToken}`,
-                "Accept": "application/vnd.github+json"
+            const response = await fetch(
+                "https://twoj-worker.workers.dev",
+                    {
+                    method: "POST",
+                        headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        fileName: fileName,
+                        content: base64Content
+                    })
                 }
-            });
+            );
 
             const files = await response.json();
             console.log(files);
@@ -218,19 +259,19 @@
 
         try {
 
-            const response = await fetch(url, {
-                method: "PUT",
-                headers: {
-                    "Authorization": `Bearer ${githubToken}`,
-                    "Accept": "application/vnd.github+json",
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    message: `Dodano zdjęcie ${fileName}`,
-                    content: base64Content,
-                    branch: branch
-                })
-            });
+            const response = await fetch(
+                "https://twoj-worker.workers.dev",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        fileName: fileName,
+                        content: base64Content
+                    })
+                }
+            );
 
             const result = await response.json();
 
