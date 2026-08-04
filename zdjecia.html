@@ -126,14 +126,22 @@
 
 <div class="upload-panel">
 
+    <label for="imageInput" class="file-label">
+        📸 Wybierz zdjęcie
+    </label>
+
     <input
         type="file"
         id="imageInput"
         accept="image/*"
         capture="environment">
 
-    <button onclick="uploadImage()">
-        Wrzuć fotkę
+    <div id="fileName" class="file-name">
+        Nie wybrano zdjęcia
+    </div>
+
+    <button class="upload-btn" onclick="uploadImage()">
+        ⬆️ Wrzuć fotkę
     </button>
 
 </div>
