@@ -117,17 +117,6 @@
 
 <script>
 
-export default {
-  async fetch(request, env) {
-
-    if (request.method !== "POST") {
-      return new Response("Method not allowed", {
-        status: 405
-      });
-    }
-
-    const data = await request.json();
-
     const owner = "tomekkotlewski";
     const repo = "weronika-lukasz";
     const branch = "main";
@@ -160,49 +149,13 @@ export default {
 
     async function loadGallery() {
 
-        const url =
-            `https://api.github.com/repos/${owner}/${repo}/contents/${folder}`;
-        
         try {
-            
+    
             const response = await fetch(
-                "https://twoj-worker.workers.dev",
-                    {
-                    method: "POST",
-                        headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        fileName: fileName,
-                        content: base64Content
-                    })
-                }
+                "https://api.github.com/repos/tomekkotlewski/weronika-lukasz/contents/galeria"
             );
 
             const files = await response.json();
-            console.log(files);
-
-            if (!response.ok) {
-
-                console.error("Błąd GitHub:", files);
-
-                alert(
-                    "Błąd GitHub:\n\n" +
-                    JSON.stringify(files, null, 2)
-                );
-
-                return;
-            }
-
-            if (!Array.isArray(files)) {
-
-                console.error(
-                    "Nie otrzymano tablicy plików:",
-                    files
-                );
-
-                return;
-            }
 
             const gallery =
                 document.getElementById("gallery");
@@ -217,7 +170,7 @@ export default {
                         document.createElement("img");
 
                     img.src = file.download_url;
-                    img.alt = file.name;
+                img.alt = file.name;
 
                     gallery.appendChild(img);
                 });
