@@ -149,42 +149,54 @@
 
     async function loadGallery() {
 
-        try {
-    
-            const response = await fetch(
-                "https://weronika-lukasz.tomek-kotlewski.workers.dev/"
-            );
+    try {
 
-            const files = await response.json();
+        const response = await fetch(
+            "https://weronika-upload.tomek-kotlewski.workers.dev"
+        );
 
-            const gallery =
-                document.getElementById("gallery");
+        const files = await response.json();
 
-            gallery.innerHTML = "";
+        const gallery =
+            document.getElementById("gallery");
 
-            files
-                .filter(file => file.type === "file")
-                .forEach(file => {
+        gallery.innerHTML = "";
 
-                    const img =
-                        document.createElement("img");
+        files
+            .filter(file =>
+                file.type === "file" &&
+                file.download_url &&
+                (
+                    file.name.endsWith(".jpg") ||
+                    file.name.endsWith(".jpeg") ||
+                    file.name.endsWith(".png") ||
+                    file.name.endsWith(".webp")
+                )
+            )
+            .forEach(file => {
 
-                    img.src = file.download_url;
-                img.alt = file.name;
+                const img =
+                    document.createElement("img");
 
-                    gallery.appendChild(img);
-                });
+                img.src =
+                    file.download_url;
 
-        } catch (err) {
+                img.alt =
+                    file.name;
 
-            console.error(err);
+                gallery.appendChild(img);
+            });
 
-            alert(
-                "Błąd ładowania galerii:\n\n" +
-                err.message
-            );
-        }
+    } catch (err) {
+
+        console.error(err);
+
+        alert(
+            "Błąd ładowania galerii:\n" +
+            err.message
+        );
     }
+}
 
     async function uploadImage() {
 
@@ -213,18 +225,19 @@
         try {
 
             const response = await fetch(
-                "https://weronika-lukasz.tomek-kotlewski.workers.dev",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        fileName: fileName,
-                        content: base64Content
-                    })
-                }
-            );
+    "https://WERONIKA-UPLOAD.xxx.workers.dev",
+    {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            fileName: fileName,
+            content: base64Content
+        })
+    }
+);
+
 
             const result = await response.json();
 
