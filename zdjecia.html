@@ -190,8 +190,46 @@
     <span class="close">&times;</span>
     <img id="lightboxImg">
 </div>
+
+lightboxImg.addEventListener(
+    "touchstart",
+    (e) => {
+        touchStartX =
+            e.changedTouches[0].screenX;
+    },
+    { passive: true }
+);
+
+lightboxImg.addEventListener(
+    "touchend",
+    (e) => {
+
+        touchEndX =
+            e.changedTouches[0].screenX;
+
+        const diff =
+            touchStartX - touchEndX;
+
+        if (Math.abs(diff) < 50) {
+            return;
+        }
+
+        if (diff > 0) {
+            showImage(currentIndex + 1);
+        } else {
+            showImage(currentIndex - 1);
+        }
+    },
+    { passive: true }
+);
     
 <script>
+
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    let galleryFiles = [];
+    let currentIndex = 0;
 
     document
     .getElementById("imageInput")
@@ -346,7 +384,23 @@ lightbox.onclick = (e) => {
         lightbox.style.display = "none";
     }
 };
-    
+
+function showImage(index) {
+
+    if (index < 0) {
+        index = galleryFiles.length - 1;
+    }
+
+    if (index >= galleryFiles.length) {
+        index = 0;
+    }
+
+    currentIndex = index;
+
+    document.getElementById(
+        "lightboxImg"
+    ).src = galleryFiles[index].download_url;
+}
 
 </script>
 </body>
