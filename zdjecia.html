@@ -172,17 +172,9 @@ async function loadGallery() {
             
 img.onclick = () => {
 
-document.getElementById(
-
-"lightboxImg"
-
-).src = img.src;
+document.getElementById("lightboxImg").src = img.src;
  
-document.getElementById(
-
-"lightbox"
-
-).style.display = "flex";
+document.getElementById("lightbox").style.display = "flex";
 
 };
 
@@ -273,13 +265,24 @@ document.querySelector(".close")
     ).style.display = "none";
 };
 
-document.getElementById(
-    "lightbox"
-).onclick = () => {
+const lightbox =
+    document.getElementById("lightbox");
 
-    document.getElementById(
-        "lightbox"
-    ).style.display = "none";
+const lightboxImg =
+    document.getElementById("lightboxImg");
+
+const closeBtn =
+    document.querySelector(".close");
+
+closeBtn.onclick = () => {
+    lightbox.style.display = "none";
+};
+
+lightbox.onclick = (e) => {
+
+    if (e.target === lightbox) {
+        lightbox.style.display = "none";
+    }
 };
     
 
