@@ -149,6 +149,23 @@
             background: #e00059;
             transform: translateY(-2px);
         }
+
+        .loader {
+            display: none;
+        width: 40px;
+        height: 40px;
+        border: 4px solid #ffd1e0;
+        border-top: 4px solid #FF0066;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 10px auto;
+        }
+
+        @keyframes spin {
+            100% {
+            transform: rotate(360deg);
+            }
+        }
         
         
     </style>
@@ -181,6 +198,7 @@
     <button class="upload-btn" onclick="uploadImage()">
         ⬆️ Wrzuć fotkę
     </button>
+    <div id="loader" class="loader"></div>
 
 </div>
 
@@ -273,6 +291,9 @@ async function loadGallery() {
     }
 
     const file = input.files[0];
+        
+    const loader = document.getElementById("loader");
+    loader.style.display = "block";
 
     const reader = new FileReader();
 
@@ -305,12 +326,11 @@ async function loadGallery() {
             const result = await response.json();
 
             if (!response.ok) {
+                loader.style.display = "none";
                 console.error(result);
                 alert("Błąd wysyłania zdjęcia.");
                 return;
             }
-
-            alert("Zdjęcie wysłane!");
 
             loadGallery();
 
@@ -328,6 +348,11 @@ async function loadGallery() {
 }
 
 loadGallery();
+loader.style.display = "none";
+input.value = "";
+document.getElementById("fileName").textContent =
+    "Nie wybrano zdjęcia";
+    
 console.log("Ładuję galerię...");
 
 
