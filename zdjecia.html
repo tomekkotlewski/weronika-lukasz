@@ -295,14 +295,11 @@ async function loadGallery() {
     const loader = document.getElementById("loader");
     loader.style.display = "block";
 
-    const formData = new FormData();
-    formData.append("file", file);
+    const reader = new FileReader();
 
-    await fetch(url, {
-        method: "POST",
-        body: formData
-    });
-
+    reader.onload = async function () {
+        const base64Content =
+            reader.result.split(",")[1];
 
         const fileName =
             `${Date.now()}_${file.name}`;
