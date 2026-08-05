@@ -275,9 +275,9 @@ async function loadGallery() {
         });
 
     } catch (err) {
-
+        loader.style.display = "none";
         console.error(err);
-
+        alert("Błąd:\n" + err.message);
     }
 }
 
@@ -335,12 +335,9 @@ async function loadGallery() {
             loadGallery();
 
         } catch (err) {
-
+            loader.style.display = "none";
             console.error(err);
-
-            alert(
-                "Błąd:\n" + err.message
-            );
+            alert("Błąd:\n" + err.message);
         }
     };
 
