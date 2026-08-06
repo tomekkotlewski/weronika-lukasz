@@ -254,7 +254,7 @@ async function loadGallery() {
             const img =
                 document.createElement("img");
 
-            img.src = file.thumbnail_url;
+            img.src = file.download_url;
             img.alt = file.name;
             
             img.onclick = () => {
