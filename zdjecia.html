@@ -278,8 +278,11 @@ async function loadGallery() {
 
         galleryFiles = files
             .filter(file => file.download_url)
-            .reverse()
-        );
+            .sort((a, b) => {
+                const timeA = parseInt(a.name.split("_")[0]);
+                const timeB = parseInt(b.name.split("_")[0]);
+                return timeB - timeA; // najnowsze na górze
+            });
         
         galleryFiles.forEach((file, index) => {
 
