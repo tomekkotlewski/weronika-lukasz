@@ -290,6 +290,8 @@ async function loadGallery() {
                 document.createElement("img");
 
             img.src = file.download_url;
+            img.loading = "lazy";
+            img.decoding = "async";
             
             img.alt = file.name;
             
