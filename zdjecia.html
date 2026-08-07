@@ -367,7 +367,7 @@ async function loadGallery() {
                 return;
             }
 
-            await loadGallery();
+            gallery.prepend(img);
 
             loader.style.display = "none";
             input.value = "";
