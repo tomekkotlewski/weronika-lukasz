@@ -367,11 +367,13 @@ async function loadGallery() {
                 return;
             }
 
+            await loadGallery();
 
+            loader.style.display = "none";
+            input.value = "";
+            
             document.getElementById("fileName").textContent =
                 "Nie wybrano zdjęcia";
-
-            loadGallery();
 
         } catch (err) {
             loader.style.display = "none";
