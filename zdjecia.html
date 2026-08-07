@@ -276,9 +276,9 @@ async function loadGallery() {
 
         gallery.innerHTML = "";
 
-        galleryFiles = files.files
+        galleryFiles = files
             .filter(file => file.download_url)
-            .reverse();
+            .reverse()
         );
         
         galleryFiles.forEach((file, index) => {
