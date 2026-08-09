@@ -350,7 +350,6 @@ async function loadGallery() {
     }
 );
 
-
             const result = await response.json();
 
             if (!response.ok) {
@@ -376,9 +375,6 @@ async function loadGallery() {
 }
 
 loadGallery();
-    
-console.log("Ładuję galerię...");
-
 
 document.querySelector(".close")
     .onclick = () => {
