@@ -226,9 +226,6 @@
         Nie wybrano zdjęcia!
     </div>
 
-    <button class="upload-btn" onclick="uploadImage()">
-        ⬆️ Wrzuć fotkę
-    </button>
     <div id="loader" class="loader"></div>
 
 </div>
@@ -256,6 +253,9 @@
             this.files.length
                 ? this.files[0].name
                 : "Nie wybrano zdjęcia";
+        if (this.files.length) {
+            uploadImage();
+        }
     });
 
 
