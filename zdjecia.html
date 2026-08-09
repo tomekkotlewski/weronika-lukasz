@@ -265,9 +265,6 @@ async function loadGallery() {
 
         const response = await fetch(
             "https://weronika-upload.tomek-kotlewski.workers.dev/"
-            {
-                cache: "no-store"
-            }
         );
 
         const files = await response.json();
