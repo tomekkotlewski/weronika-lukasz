@@ -244,11 +244,6 @@
     document
     .getElementById("imageInput")
     .addEventListener("change", function () {
-
-        document.getElementById("fileName").textContent =
-            this.files.length
-                ? this.files[0].name
-                : "Nie wybrano zdjęcia";
         if (this.files.length) {
             uploadImage();
         }
@@ -367,9 +362,6 @@ async function loadGallery() {
 
             loader.style.display = "none";
             input.value = "";
-            
-            document.getElementById("fileName").textContent =
-                "Nie wybrano zdjęcia";
 
         } catch (err) {
             loader.style.display = "none";
@@ -379,14 +371,9 @@ async function loadGallery() {
     };
 
     reader.readAsDataURL(file);
-
-    
 }
 
 loadGallery();
-
-document.getElementById("fileName").textContent =
-    "Nie wybrano zdjęcia";
     
 console.log("Ładuję galerię...");
 
