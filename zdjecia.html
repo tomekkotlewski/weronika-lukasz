@@ -359,7 +359,7 @@ async function loadGallery() {
                 return;
             }
 
-            await loadGallery();
+            addImageToGallery(result.download_url);
 
             loader.style.display = "none";
             input.value = "";
