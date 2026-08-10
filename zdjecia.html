@@ -320,55 +320,105 @@ async function loadGallery() {
     }
 
     const file = input.files[0];
-        
+
     const loader = document.getElementById("loader");
     loader.style.display = "block";
 
     const reader = new FileReader();
 
-    reader.onload = async function () {
-        const base64Content =
-            reader.result.split(",")[1];
+    reader.onload = function (e) {
 
-        const fileName =
-            `${Date.now()}_${file.name}`;
+        const img = new Image();
 
+        img.onload = async function () {
 
-        try {
+            try {
 
-            const response = await fetch(
-    "https://weronika-upload.tomek-kotlewski.workers.dev/",
-    {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            fileName: fileName,
-            content: base64Content
-        })
-    }
-);
+                const canvas = document.createElement("canvas");
+                const ctx = canvas.getContext("2d");
 
-            const result = await response.json();
+                const MAX_SIZE = 1600;
 
-            if (!response.ok) {
+                let width = img.width;
+                let height = img.height;
+
+                if (width > height) {
+
+                    if (width > MAX_SIZE) {
+                        height = height * (MAX_SIZE / width);
+                        width = MAX_SIZE;
+                    }
+
+                } else {
+
+                    if (height > MAX_SIZE) {
+                        width = width * (MAX_SIZE / height);
+                        height = MAX_SIZE;
+                    }
+
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+
+                ctx.drawImage(
+                    img,
+                    0,
+                    0,
+                    width,
+                    height
+                );
+
+                const compressedDataUrl =
+                    canvas.toDataURL(
+                        "image/jpeg",
+                        0.75
+                    );
+
+                const base64Content =
+                    compressedDataUrl.split(",")[1];
+
+                const fileName =
+                    `${Date.now()}.jpg`;
+
+                const response = await fetch(
+                    "https://weronika-upload.tomek-kotlewski.workers.dev/",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            fileName: fileName,
+                            content: base64Content
+                        })
+                    }
+                );
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    console.error(result);
+                    alert("Błąd wysyłania zdjęcia.");
+                    loader.style.display = "none";
+                    return;
+                }
+
+                await loadGallery();
+
+                input.value = "";
                 loader.style.display = "none";
-                console.error(result);
-                alert("Błąd wysyłania zdjęcia.");
-                return;
+
+            } catch (err) {
+
+                loader.style.display = "none";
+                console.error(err);
+                alert("Błąd:\n" + err.message);
+
             }
+        };
 
-            await loadGallery();
-
-            loader.style.display = "none";
-            input.value = "";
-
-        } catch (err) {
-            loader.style.display = "none";
-            console.error(err);
-            alert("Błąd:\n" + err.message);
-        }
+        img.src = e.target.result;
     };
 
     reader.readAsDataURL(file);
