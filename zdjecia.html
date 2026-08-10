@@ -76,8 +76,12 @@
         }
 
         .gallery {
-            columns: 150px;
-            column-gap: 15px;
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fill,
+                minmax(150px, 1fr)
+            );
+            gap: 15px;
         }
 
         .gallery img {
