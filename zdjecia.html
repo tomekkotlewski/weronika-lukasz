@@ -200,6 +200,33 @@
             text-shadow: 2px 2px 10px rgba(0,0,0,0.7);
         }
 
+        .nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 60px;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 15px;
+            user-select: none;
+            z-index: 10000;
+        }
+
+        .prev {
+            left: 20px;
+        }    
+
+        .next {
+            right: 20px;
+        }
+
+        .nav:hover {
+            color: #FF0066;
+        }
+
+
+        
     </style>
 </head>
 <body>
@@ -236,13 +263,15 @@
 
 <div id="lightbox" class="lightbox">
     <span class="close">&times;</span>
+
+    <span class="nav prev">&#10094;</span>
+
     <img id="lightboxImg">
+
+    <span class="nav next">&#10095;</span>
 </div>
     
 <script>
-
-    let touchStartX = 0;
-    let touchEndX = 0;
 
     let galleryFiles = [];
     let currentIndex = 0;
@@ -475,37 +504,15 @@ function showImage(index) {
     ).src = galleryFiles[index].download_url;
 }
 
-        lightboxImg.addEventListener(
-        "touchstart",
-        (e) => {
-            touchStartX =
-                e.changedTouches[0].screenX;
-        },
-        { passive: true }
-    );
+document.querySelector(".prev").onclick = (e) => {
+    e.stopPropagation();
+    showImage(currentIndex - 1);
+};
 
-    lightboxImg.addEventListener(
-        "touchend",
-        (e) => {
-
-            touchEndX =
-                e.changedTouches[0].screenX;
-
-            const diff =
-                touchStartX - touchEndX;
-
-            if (Math.abs(diff) < 50) {
-                return;
-            }
-    
-            if (diff > 0) {
-                showImage(currentIndex + 1);
-            } else {
-                showImage(currentIndex - 1);
-            }
-        },
-        { passive: true }
-    );
+document.querySelector(".next").onclick = (e) => {
+    e.stopPropagation();
+    showImage(currentIndex + 1);
+};
 
 </script>
 </body>
