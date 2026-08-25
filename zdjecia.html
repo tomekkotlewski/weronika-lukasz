@@ -279,7 +279,7 @@
     <input
         type="file"
         id="imageInput"
-        accept="image/*, viedo/*"
+        accept="image/*, video/*"
         capture="environment">
 
     <div id="loader" class="loader"></div>
@@ -362,6 +362,8 @@ async function loadGallery() {
                 video.muted = true;
                 video.playsInline = true;
                 video.preload = "metadata";
+                video.controls = false;
+                video.poster = file.thumbnail_url || "";
 
                 video.onclick = () => {
                     currentIndex = index;
@@ -415,12 +417,17 @@ async function loadGallery() {
 
     const file = input.files[0];
 
+    if (file.type.startsWith("video/")) {
+        await uploadVideo(file);
+        return;
+    }
+
     const loader = document.getElementById("loader");
     loader.style.display = "block";
 
     const reader = new FileReader();
 
-    reader.onload = function (e) {
+    reader.onload = async function (e) {
 
         const img = new Image();
 
@@ -518,6 +525,103 @@ async function loadGallery() {
     reader.readAsDataURL(file);
 }
 
+
+
+
+
+
+
+
+async function uploadVideo(file) {
+
+    const loader =
+        document.getElementById("loader");
+
+    loader.style.display = "block";
+
+    try {
+
+        const reader =
+            new FileReader();
+
+        reader.onload = async function(e) {
+
+            const base64Content =
+                e.target.result.split(",")[1];
+
+            const extension =
+                file.name.split(".").pop();
+
+            const response = await fetch(
+                "https://weronika-upload.tomek-kotlewski.workers.dev/",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        fileName:
+                            `${Date.now()}.${extension}`,
+                        content:
+                            base64Content
+                    })
+                }
+            );
+
+            const result =
+                await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    result.error ||
+                    "Błąd wysyłania filmu"
+                );
+            }
+
+            await loadGallery();
+
+            document.getElementById(
+                "imageInput"
+            ).value = "";
+
+            loader.style.display = "none";
+        };
+
+        reader.readAsDataURL(file);
+
+    } catch (err) {
+
+        loader.style.display = "none";
+
+        alert(
+            "Błąd:\n" + err.message
+        );
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
 loadGallery();
 
 document.querySelector(".close")
@@ -538,12 +642,20 @@ const closeBtn =
     document.querySelector(".close");
 
 closeBtn.onclick = () => {
+    const video =
+        document.getElementById("lightboxVideo");
+    video.pause();
+    video.currentTime = 0;
     lightbox.style.display = "none";
 };
 
 lightbox.onclick = (e) => {
 
     if (e.target === lightbox) {
+        const video =
+            document.getElementById("lightboxVideo");
+        video.pause();
+        video.currentTime = 0;
         lightbox.style.display = "none";
     }
 };
@@ -570,6 +682,8 @@ function showMedia(index) {
 
     const video =
         document.getElementById("lightboxVideo");
+        video.pause();
+        video.currentTime = 0;
 
     if (isVideo) {
 
