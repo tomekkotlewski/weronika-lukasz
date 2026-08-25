@@ -204,25 +204,16 @@
             padding-top: 20px;
 
             -webkit-mask-image:
-                linear-gradient(to right,
+                radial-gradient(ellipse to center,
                     tranmsparent 0%;
-                    black 30%,
-                    black 70%,
-                    transparent 100%
-                ),
-                linear-gradient(to bottom,
-                    transparent 0%,
-                    black 30%,
-                    black 70%,
+                    black 50%,
                     transparent 100%
                 );
-            -webkit-mask-composite: source-in;
-        }
-
-
-
-
-            
+            mask-image:
+                radial-gradient(ellipse to center,
+                    black 50%,
+                    transparent 100%
+                );
         }
 
         .hero-text {
