@@ -364,6 +364,7 @@ async function loadGallery() {
                 video.preload = "metadata";
                 video.controls = false;
                 video.poster = file.thumbnail_url || "";
+                video.currentTime = 0.1;
 
                 video.onclick = () => {
                     currentIndex = index;
