@@ -105,6 +105,13 @@
             transform: scale(1.03);
         }
 
+        .gallery video {
+            width: 100%;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            display: block;
+        }
+
         .lightbox {
             display: none;
             position: fixed;
@@ -272,7 +279,7 @@
     <input
         type="file"
         id="imageInput"
-        accept="image/*"
+        accept="image/*, viedo/*"
         capture="environment">
 
     <div id="loader" class="loader"></div>
@@ -287,6 +294,17 @@
     <span class="nav prev">&#10094;</span>
 
     <img id="lightboxImg">
+
+    <video
+        id="lightboxVideo"
+        controls
+        style="
+            display:none;
+            max-width:95%;
+            max-height:95%;
+            border-radius:10px;
+        ">
+    </video>
 
     <span class="nav next">&#10095;</span>
 </div>
@@ -332,29 +350,50 @@ async function loadGallery() {
         
         galleryFiles.forEach((file, index) => {
 
-            const img =
-                document.createElement("img");
-
-            img.loading = "lazy";
-            img.decoding = "async";
-
-            img.src = file.download_url;
-            img.alt = file.name;
+            const isVideo =
+                /\.(mp4|mov|webm)$/i.test(file.name);
             
-            img.onclick = () => {
+            if (isVideo) {
 
-                currentIndex = index;
+                const video =
+                    document.createElement("video");
 
-                document.getElementById(
-                    "lightboxImg"
-                ).src = file.download_url;
+                video.src = file.download_url;
+                video.muted = true;
+                video.playsInline = true;
+                video.preload = "metadata";
 
-                document.getElementById(
-                    "lightbox"
-                ).style.display = "flex";
-            };
+                video.onclick = () => {
+                    currentIndex = index;
+                    showMedia(index);
 
-            gallery.appendChild(img);
+                    document.getElementById(
+                        "lightbox"
+                    ).style.display = "flex";
+                };
+
+                gallery.appendChild(video);
+
+            } else {
+
+                const img =
+                    document.createElement("img");
+
+                img.loading = "lazy";
+                img.decoding = "async";
+                img.src = file.download_url;
+
+                img.onclick = () => {
+                    currentIndex = index;
+                    showMedia(index);
+
+                    document.getElementById(            
+                        "lightbox"
+                    ).style.display = "flex";
+                };
+
+                gallery.appendChild(img);
+            }            
 
         });
 
@@ -509,7 +548,7 @@ lightbox.onclick = (e) => {
     }
 };
 
-function showImage(index) {
+function showMedia(index) {
 
     if (index < 0) {
         index = galleryFiles.length - 1;
@@ -521,19 +560,43 @@ function showImage(index) {
 
     currentIndex = index;
 
-    document.getElementById(
-        "lightboxImg"
-    ).src = galleryFiles[index].download_url;
+    const file = galleryFiles[index];
+
+    const isVideo =
+        /\.(mp4|mov|webm)$/i.test(file.name);
+
+    const img =
+        document.getElementById("lightboxImg");
+
+    const video =
+        document.getElementById("lightboxVideo");
+
+    if (isVideo) {
+
+        img.style.display = "none";
+
+        video.style.display = "block";
+        video.src = file.download_url;
+        video.play();
+
+    } else {
+
+        video.pause();
+        video.style.display = "none";
+
+        img.style.display = "block";
+        img.src = file.download_url;
+    }
 }
 
 document.querySelector(".prev").onclick = (e) => {
     e.stopPropagation();
-    showImage(currentIndex - 1);
+    showMedia(currentIndex - 1);
 };
 
 document.querySelector(".next").onclick = (e) => {
     e.stopPropagation();
-    showImage(currentIndex + 1);
+    showMedia(currentIndex + 1);
 };
 
 </script>
