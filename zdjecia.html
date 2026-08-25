@@ -351,7 +351,7 @@ async function loadGallery() {
         galleryFiles.forEach((file, index) => {
 
             const isVideo =
-                /\.(mp4|mov|webm)$/i.test(file.name);
+                /\.(mp4|mov|webm|m4v)$/i.test(file.name);
             
             if (isVideo) {
 
@@ -694,7 +694,7 @@ function showMedia(index) {
     const file = galleryFiles[index];
 
     const isVideo =
-        /\.(mp4|mov|webm)$/i.test(file.name);
+        /\.(mp4|mov|webm|m4v)$/i.test(file.name);
 
     const img =
         document.getElementById("lightboxImg");
