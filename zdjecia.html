@@ -212,7 +212,7 @@
 
             -webkit-mask-image:
                 radial-gradient(ellipse at center,
-                    tranmsparent 0%;
+                    transparent 0%,
                     black 50%,
                     transparent 100%
                 );
@@ -570,7 +570,6 @@ async function uploadVideo(file) {
 
             const extension =
                 file.name.split(".").pop();
-                fileName: `${Date.now()}.${extension}`;
 
             const response = await fetch(
                 "https://weronika-upload.tomek-kotlewski.workers.dev/",
@@ -584,6 +583,8 @@ async function uploadVideo(file) {
                             `${Date.now()}.${extension}`,
                         content:
                             base64Content
+                        contentType:
+                                file.type
                     })
                 }
             );
@@ -643,14 +644,6 @@ async function uploadVideo(file) {
     
 
 loadGallery();
-
-document.querySelector(".close")
-    .onclick = () => {
-
-    document.getElementById(
-        "lightbox"
-    ).style.display = "none";
-};
 
 const lightbox =
     document.getElementById("lightbox");
